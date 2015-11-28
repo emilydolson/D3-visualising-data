@@ -82,7 +82,7 @@ Behind the scenes, the html is being used to created a heirarchical structure
 of all of the pieces in your webpage. This is called the *Document Object Model
 Tree*:
 
-![Diagram of the Document Object Model tree created by the above html](img/DOM.png =494x433.5)
+<img src="img/DOM.png" alt="Diagram of the Document Object Model tree created by the above html" style="width: 50%;"/>
 
 > ## Other elements {.challenge}
 >
