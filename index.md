@@ -48,7 +48,6 @@ Along the way, we will learn:
 3.  [Images and SVG](03-images-and-svg.html) 
 4. 	[Publishing with Github](04-publishing-with-github.html)
 5. 	[JavaScript](05-javascript.html)
-6.	[JSON data format](06-json.html)
 7.	[D3 Setup](07-d3setup.html)
 8.	[D3 Into the data](08-d3enter.html)
 9.	[D3 Add and remove](09-d3exit.html)
