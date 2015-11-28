@@ -29,16 +29,14 @@ Along the way, we will learn:
 
 > ## Prerequisites {.prereq}
 >
-> * Github account and Github client for your operating system (Windows, Linux, iOS).
-> * Participation in at least one SWC workshop.
 > * Familiarity with at least one programming language: concept of loops, functions, and conditionals.
 > * Familiarity with your favorite text editor (Sublime 2 is a good option).
 > * You will need to be comfortable with Google! 
-> * Preferably Google Chrome (because of its excellent developer tools).
+> * A modern web browser with developer tools (Chrome and Firefox are both good choices)
 
 > ## Setup {.prereq}
 >
-> * Install [live-server](https://www.npmjs.com/package/live-server) for your operating system.
+> * Create a Github account (if you don't already have one) and make sure you have git installed on your computer (here's [a good option for Windows](https://git-for-windows.github.io/)). A graphical interface for git is nice to have if you don't want to do everything from the command line, but not necessary ([Mac and Windows](https://desktop.github.com/), [Linux](https://git-scm.com/download/gui/linux)).
 > * It's probably a good idea to install a GitHub client.
 
 
