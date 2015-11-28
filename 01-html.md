@@ -79,8 +79,9 @@ using &lt;div&gt; to open and &lt;/div&gt; to close it.
 ~~~
 
 Behind the scenes, the html is being used to created a heirarchical structure 
-of all of the pieces in your webpage. This is called the *Document Object Model
-Tree*:
+of all of the pieces in your webpage. This is called the **Document Object Model
+Tree**. Each element that you add to the page becomes a node, and any elements 
+declared inside it are its children:
 
 <img src="img/DOM.png" alt="Diagram of the Document Object Model tree created by the above html" style="width: 50%;"/>
 
