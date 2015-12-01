@@ -14,7 +14,7 @@ minutes: 20
 At the moment, the year that we are looking at in the data is hardcoded. 
 Naturally, we want the user to be able to see how the data changes over time. 
 
-Let's do this a slider. The first thing we need is add this slider to the user interface (our website). A slider element is actually an `input` element with the the type `range`. We give it a ID in order to be able to select is from our JavaScript script, a class to style it (if we choose to), and a minimum, maximum, and step size that depend on our data. `value` is what we read out in order to know the position of the slider. Let's initialise it somewhere in the middle (1979).
+Let's do this a slider. The first thing we need is to add this slider to the user interface (our website). A slider element is actually an `input` element with the the type `range`. We give it a ID in order to be able to select is from our JavaScript script, a class to style it (if we choose to), and a minimum, maximum, and step size that depend on our data. `value` is what we read out in order to know the position of the slider. Let's initialise it somewhere in the middle (1979).
 
 ~~~{.html}
 <input type="range" name="range" class="slider" id="year_slider" value="1979" min="1950" max="2008" step="1" ><br>
@@ -22,39 +22,63 @@ Let's do this a slider. The first thing we need is add this slider to the user i
 
 In our script, we now want the year to be a variable, so we need to initialise it. 
 Because the value is a string, we need to parse it to an integer using `parseInt()`.
-To get the index (rather than the actual year), we can simply subtract the first year 1950.
 
 ~~~{.js}
-var year_idx = parseInt(document.getElementById("year_slider").value)-1950;
+var year = parseInt(document.getElementById("year_slider").value);
 ~~~
 
-Updating the year becomes quite simple. All we need to do is add another event listener that changes the year the moment we touch the slider. The event we want to listen for is called `input`. We then execute the `update()` function we wrote earlier.
+Now we need add another event listener that changes the year the moment we touch the slider. The event we want to listen for is called `input`. When we get an event, we need to add a new filter command to update the data.  We then execute the `update()` function we wrote earlier.
 
 ~~~{.js}
 d3.select("#year_slider").on("input", function () {
-	year_idx = parseInt(this.value) - 1950;
+	year = parseInt(this.value) - 1950;
+	filtered_nations = nations.filter(function(nation){nation.year==year})
 	update();
 });
 ~~~
+
+Uh-oh, looks like this doesn't play nicely with our checkboxes! Let's add a line
+to our filter function to make sure that this continent is currently checked:
+
+~~~{.js}
+d3.select("#year_slider").on("input", function () {
+	year = parseInt(this.value) - 1950;
+	filtered_nations = nations.filter(function(nation){
+		//Grab the checkbox corresponding to this country
+		var checkbox = d3.selectAll(".region_cb")[0].filter(
+			function(cb){return cb.value == nation.country})[0];
+
+		//If the checkbox is checked, see if the year matches
+		if (checkbox.checked){		
+			 return(nation.year==year)
+		} else {
+		       //Otherwise it doesn't matter what the year is
+		       return(false)
+		}
+	})
+	update();
+});
+~~~
+
 
 So far, the update function only knows how to handle new data (`.enter`) and removed data (`.exit`), but not what to do when we update data. 
 In addition to `d3.enter()` and `d3.exit()`, D3 also offers `d3.transition` to handle updating data. First, we need to define how to transition between data points. We might want to interpolate between to values linearly over the duration of 200 ms, like this: 
 
 ~~~{.js}
-dot.transition().ease("linear").duration(200);
+circles.transition().ease("linear").duration(200);
 ~~~
 
 Now we know how it's gonna happen, but we need to tell the transition what the actual change is. 
-We can simply move the part of our code that updates the circle attributes from our `enter` function to our `transition` function. Now, instead of using a hardcoded index for the year, we use the index `year_idx` that we updated in our event listener earlier.
+We can simply move the part of our code that updates the circle attributes from our `enter` function to our `transition` function. 
 
 ~~~{.js}
-dot.enter().append("circle").attr("class","dot")
-        .style("fill", function(d) { return colorScale(d.region); });
-dot.exit().remove();
-dot.transition().ease("linear").duration(200)
-				.attr("cx", function(d) { return xScale(d.income[year_idx]); }) // this is how attr knows to work with the data
-				.attr("cy", function(d) { return yScale(d.lifeExpectancy[year_idx]); })
-				.attr("r", function(d) { return rScale(d.population[year_idx]); });
+circles.enter().append("circle").attr("class","data_point")
+        .style("fill", function(d) { return colorScale(d.continent); });
+circles.exit().remove();
+circles.transition().ease("linear").duration(200)
+	    .attr("cx", function(d) { return xScale(d.gdpPercap); }) 
+	    .attr("cy", function(d) { return yScale(d.lifeExp); })
+	    .attr("r", function(d) {return rScale(d.pop)});
 ~~~
 
 > ## Other transition functions you might want {.callout}
@@ -95,66 +119,9 @@ dot.enter().append("circle").attr("class","dot")
 
 Like any programming language, JavaScript can also be used to evaluate summary statistics of our data. As an example, let's compute the mean life expectancy and income for the different regions. 
 
-First, we need to loop through all the data and group them by the region they are in:
-
-~~~{.js}
-// Calculate the averages for each region.
-var region_names = ["Sub-Saharan Africa", "South Asia", "Middle East & North Africa", "America", "East Asia & Pacific", "Europe & Central Asia"];
-
-var region_data = [];
-for (var i in region_names) {
-	var filtered_nations_by_regions = nations.filter(function(nation){
-		return (nation.region == region_names[i]); 
-	});
-	region_data[i] = calc_mean(filtered_nations_by_regions);
-}
-
-var filtered_reg_nations = region_data.map(function(region) { return region;});
-~~~
-
-Next, we write a function that returns an array of objects region_data. We want it to contain the mean income and life for each year across all nations, weighted by population.
-
-~~~{.js}
-function calc_mean(region_data) {
-	var mean_income = [];
-	var mean_lifeExpectancy = [];
-
-	for (var year_idx2 in region_data[0].years) {
-		var sum_income = 0;
-		var sum_lifeExpectancy = 0;
-		var sum_population = 0;
-
-		for (var k in region_data) {
-			var kpop = region_data[k].population[year_idx2];
-			var kincome = region_data[k].income[year_idx2];
-			var klife = region_data[k].lifeExpectancy[year_idx2];
-		    sum_income += kpop*kincome; 
-		    sum_lifeExpectancy += kpop*klife;
-		    sum_population += kpop;			    
-		}
-
-		mean_income[year_idx2] = sum_income/sum_population;
-		mean_lifeExpectancy[year_idx2] = sum_lifeExpectancy/sum_population;
-	}
-	averageData = {
-		region: region_data[0].region,
-		years: region_data[0].years,
-		mean_income: mean_income,
-		mean_lifeExpectancy: mean_lifeExpectancy
-	};
-
-	return averageData;
-}
-~~~
-
-> # The master challenge {.challenge}
-> It's time to put together everything you've learned. Write code that displays (and updates) the mean values that we just computed as little crosses in the graph for the different regions.
 
 > # ...style! {.challenge}
 > Add axis labels and make the fonts pretty. 
-
-> # Using different data formats {.challenge}
-> What if you don't have your data in JSON format? Change your code to load in nations.csv instead of nations.json and have it produce the same plot. 
 
 By the end of this lesson, your page should look something like this:
 
