@@ -86,8 +86,19 @@ circles.enter().append(&quot;circle&quot;).attr(&quot;class&quot;,&quot;data_poi
 <p>Now comes the interesting part: The function <code>enter()</code> takes each element in the dataset and does everything that follows afterwards for each of these elements we're adding in. These new circles need to be added with the class 'data_point', so that next time we call <code>data_canvas.selectAll(&quot;.data_point&quot;)</code> we get the circles that have already been added to our plot.</p>
 <p>What we want to do is to create one circle for each data point. That's what the last four lines of code do. They are creating the circle, and then setting the attributes <code>cx</code>, <code>cy</code>, and <code>r</code>. The attributes <code>cx</code> and <code>cy</code> define the position of the centre of the circle and are based on the income (we are looking at the most recent data point: <code>[nation.income.length-1]</code>.) and life expectancy of the data point (that is temporarily called <code>d</code>). The radius is set to an arbitrary number... for now.</p>
 <p>This sure is a lot of circles! We probably want to only look at data from a single year at a time. We use the <code>filter()</code> function to just look at the most recent data (2007):</p>
-<pre class="js"><code>var filtered_nations = nations.filter(function(nation){return nation.year==1957})</code></pre>
-<p><code>filter()</code> is another function that wants a function as input. In this case, the function that it takes will recieve one data point at a time and return <code>true</code> if we want to plot it and <code>false</code> if we don't.</p>
+<pre class="js"><code>var filtered_nations = nations.filter(function(nation){return nation.year==2007})</code></pre>
+<p>Similar to previous functions (e.g. <code>map</code>), this function iterates over each of the elements in the array <code>nations</code>, temporarily calling it <code>nation</code>. It only includes elements in the new array <code>filtered_nations</code> if the function evaluates to 'true' for that element. Here this will be the case for data points whose year is 2007.</p>
+<div id="filtering-by-region" class="challenge panel panel-success">
+<div class="panel-heading">
+<h1><span class="glyphicon glyphicon-pencil"></span>Filtering by region</h1>
+</div>
+<div class="panel-body">
+<p>You might have noticed that our data contains information about the continent in which a country is.</p>
+<ol style="list-style-type: decimal">
+<li>Create a filter so that you only display data points from &quot;Africa&quot;.</li>
+</ol>
+</div>
+</div>
 <div id="a-new-dimension" class="challenge panel panel-success">
 <div class="panel-heading">
 <h1><span class="glyphicon glyphicon-pencil"></span>A new dimension</h1>

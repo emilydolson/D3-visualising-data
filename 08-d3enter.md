@@ -114,9 +114,16 @@ recent data (2007):
 var filtered_nations = nations.filter(function(nation){return nation.year==2007})
 ~~~
 
-`filter()` is another function that wants a function as input. In this case, the
-function that it takes will recieve one data point at a time and return `true`
-if we want to plot it and `false` if we don't.
+Similar to previous functions (e.g. `map`), this function iterates over each of the elements in the array `nations`, temporarily calling it `nation`. 
+It only includes elements in the new array `filtered_nations` if the function evaluates to 'true' for that element. Here this will be the case for data points whose year is 2007.
+
+
+> # Filtering by region {.challenge}
+> You might have noticed that our data contains information about the continent in 
+> which a country is.
+> 
+> 1. Create a filter so that you only display data points from "Africa".
+
 
 > # A new dimension {.challenge}
 > Change the code so that the radius of the circles represents the population. First, create a 'sqrt' scale with a minimum of 0 and a maximum of 5e8. The range should be between 0 and 40. 
