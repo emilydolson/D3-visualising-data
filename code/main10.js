@@ -103,6 +103,22 @@ d3.tsv("http://emilydolson.github.io/D3-visualising-data/resources/nations.csv",
 
 	//////////////////////FILL IN DATA//////////////////////////
 
+	// update the plot, includes enter, exit, and transition
+	function update() {
+	    var circles = data_canvas.selectAll("circle")  // magic! 
+		.data(filtered_nations, function(d){return d.country});
+
+	    circles.enter().append("circle").attr("class","data_point")
+		.style("fill", function(d) { return colorScale(d.continent); });
+
+	    circles.exit().remove();
+
+	    circles.transition().ease("linear").duration(200)
+		.attr("cx", function(d) { return xScale(d.gdpPercap); }) 
+		.attr("cy", function(d) { return yScale(d.lifeExp); })
+		.attr("r", function(d) {return rScale(d.pop)});				      	}
+
+
 
 	// var filtered_nations = nations.filter(function(nation){ return nation.population[nation.population.length-1][1] > 10000000;});
 
@@ -144,19 +160,5 @@ d3.tsv("http://emilydolson.github.io/D3-visualising-data/resources/nations.csv",
 		update();
 	});
 
-	// update the plot, includes enter, exit, and transition
-	function update() {
-	    var circles = data_canvas.selectAll(".dot")  // magic! 
-		.data(filtered_nations, function(d){return d.country});
-
-	    circles.enter().append("circle").attr("class","data_point")
-		.style("fill", function(d) { return colorScale(d.continent); });
-
-	    circles.exit().remove();
-
-	    circles.transition().ease("linear").duration(200)
-		.attr("cx", function(d) { return xScale(d.gdpPercap); }) 
-		.attr("cy", function(d) { return yScale(d.lifeExp); })
-		.attr("r", function(d) {return rScale(d.pop)});				      	}
 
 });
