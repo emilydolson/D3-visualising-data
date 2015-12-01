@@ -147,7 +147,7 @@ d3.tsv("http://emilydolson.github.io/D3-visualising-data/resources/nations.csv",
 	// update the plot, includes enter, exit, and transition
 	function update() {
 	    var circles = data_canvas.selectAll(".dot")  // magic! 
-		.data(filtered_nations, function(d){return d.name});
+		.data(filtered_nations, function(d){return d.country});
 
 	    circles.enter().append("circle").attr("class","data_point")
 		.style("fill", function(d) { return colorScale(d.continent); });
