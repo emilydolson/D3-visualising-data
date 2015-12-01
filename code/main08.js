@@ -93,8 +93,8 @@ d3.tsv("http://emilydolson.github.io/D3-visualising-data/resources/nations.csv",
 	var data_canvas = canvas.append("g")
 	.attr("class", "data_canvas")
 
-    var circles = data_canvas.selectAll("data_point")
-    .data(nations, function(d){return d.name});
+    var circles = data_canvas.selectAll("circle")
+    .data(nations, function(d){return d.country});
 
     circles.enter().append("circle").attr("class","data_point")                
 	    .attr("cx", function(d) { return xScale(d.gdpPercap); }) 
