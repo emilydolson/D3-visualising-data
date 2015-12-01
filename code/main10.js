@@ -115,7 +115,7 @@ d3.tsv("http://emilydolson.github.io/D3-visualising-data/resources/nations.csv",
 
 	// slider
 	d3.select("#year_slider").on("input", function () {
-	    year_idx = parseInt(this.value);
+	    year = parseInt(this.value);
 	    filtered_nations = nations.filter(function(nation){
 		//Grab the checkbox corresponding to this country
 		var checkbox = d3.selectAll(".region_cb")[0].filter(
