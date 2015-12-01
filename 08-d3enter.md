@@ -81,12 +81,12 @@ var data_canvas = canvas.append("g")
   .attr("class", "data_canvas");
       
 var circles = data_canvas.selectAll("circle")
-  .data(nations, function(d){return d.name});
+  .data(nations, function(d){return d.country});
 
 circles.enter().append("circle").attr("class","data_point")
-  .attr("cx", function(d) { return xScale(d.income[d.income.length-1]); }) 
-  .attr("cy", function(d) { return yScale(d.lifeExpectancy[d.lifeExpectancy.length-1]); })
-  .attr("r", 5);
+	.attr("cx", function(d) { return xScale(d.gdpPercap); }) 
+	.attr("cy", function(d) { return yScale(d.lifeExp); })
+	.attr("r", 5);
 ~~~
 
 We're starting this bit by adding a `g` element to our canvas.
@@ -95,7 +95,7 @@ We then select all circles. This is an empty set at the moment,
 since we haven't created any circles, yet.
 We are then telling our page where to find the data, using `.data(nations)`.
 
-We are also inserting what is called a key function `.data(nations, function(d){return d.name});`. This function will help D3 keep track of the data when we start changing it (and the order of the objects). It's important to keep the identifier unique, which is why we return only the name of the current element.
+We are also inserting what is called a key function `.data(nations, function(d){return d.country});`. This function will help D3 keep track of the data when we start changing it (and the order of the objects). It's important to keep the identifier unique, which is why we return only the country of the current element.
 
 Now comes the interesting part:
 The function `enter()` takes each element in the dataset and does everything that follows afterwards for each of these elements we're adding in. These new circles need to be added with the class 'data_point', so that next time we call `data_canvas.selectAll(".data_point")` we get the circles that have already been added to our plot.

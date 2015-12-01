@@ -97,9 +97,7 @@ d3.tsv("nations.csv", accessor, function(nations) {
     .data(nations, function(d){return d.name});
 
     circles.enter().append("circle").attr("class","data_point")                
-                  .attr("cx", function(d) { return xScale(d.income[d.income.length-1]); }) // this is how attr knows to work with the data
-                  .attr("cy", function(d) { return yScale(d.lifeExpectancy[d.lifeExpectancy.length-1]); })
-                  .attr("r", function(d) { return rScale(d.population[d.population.length-1]); });
-
-
+	    .attr("cx", function(d) { return xScale(d.gdpPercap); }) 
+	    .attr("cy", function(d) { return yScale(d.lifeExp); })
+	    .attr("r", function(d) {return rScale(d.pop)});
 })
