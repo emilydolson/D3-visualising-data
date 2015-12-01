@@ -30,15 +30,12 @@ Along the way, we will learn:
 > ## Prerequisites {.prereq}
 >
 > * Familiarity with at least one programming language: concept of loops, functions, and conditionals.
-> * Familiarity with your favorite text editor (Sublime 2 is a good option).
-> * You will need to be comfortable with Google! 
-> * A modern web browser with developer tools (Chrome and Firefox are both good choices)
+> * Familiarity with your favorite text editor (we'll be using Sublime Text, but any text editor will do!).
+> * A modern web browser with developer tools (we'll be using Chrome, but Firefox is also a good choice)
 
 > ## Setup {.prereq}
 >
 > * Create a Github account (if you don't already have one) and make sure you have git installed on your computer (here's [a good option for Windows](https://git-for-windows.github.io/)). A graphical interface for git is nice to have if you don't want to do everything from the command line, but not necessary ([Mac and Windows](https://desktop.github.com/), [Linux](https://git-scm.com/download/gui/linux)).
-> * It's probably a good idea to install a GitHub client.
-
 
 
 ## Topics
@@ -48,11 +45,11 @@ Along the way, we will learn:
 3.  [Images and SVG](03-images-and-svg.html) 
 4. 	[Publishing with Github](04-publishing-with-github.html)
 5. 	[JavaScript](05-javascript.html)
-7.	[D3 Setup](07-d3setup.html)
-8.	[D3 Into the data](08-d3enter.html)
-9.	[D3 Add and remove](09-d3exit.html)
-10. [D3 Transitions](10-d3update.html)
+6.	[D3 Setup](07-d3setup.html)
+7.	[D3 Into the data](08-d3enter.html)
+8.	[D3 Add and remove](09-d3exit.html)
+9. [D3 Transitions](10-d3update.html)
 xx. [What now?](xx-d3future.html)
 
-We are using [gapminder data](http://gapminder.org) and the later lessons are based on an example by [Mike Bostock](http://bost.ocks.org/mike/nations/). In order to make this example slightly easier, we interpolated the data. The data files can be found [here](https://github.com/IsaKiko/D3-visualising-data/blob/gh-pages/resources/nations.json).
-Lessons created by [Isabell Kiral-Kornek](https://github.com/isakiko) and [Robert Kerr](https://github.com/robrkerr).
+We are using [gapminder data](http://gapminder.org) [reformatted by Jennifer Bryan](http://www.stat.ubc.ca/~jenny/notOcto/STAT545A/examples/gapminder/data/gapminderData.txt) and the later lessons are based on an example by [Mike Bostock](http://bost.ocks.org/mike/nations/). In order to make this example slightly easier, we interpolated the data. The data files can be found [here](http://emilydolson.github.io/D3-visualising-data/resources/nations.csv).
+Lessons created by [Isabell Kiral-Kornek](https://github.com/isakiko) and [Robert Kerr](https://github.com/robrkerr) and modified for this workshop by [Emily Dolson](https://github.com/emilydolson).
