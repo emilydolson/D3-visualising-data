@@ -40,25 +40,44 @@
 </div>
 </div>
 <p>At the moment, the year that we are looking at in the data is hardcoded. Naturally, we want the user to be able to see how the data changes over time.</p>
-<p>Let's do this a slider. The first thing we need is add this slider to the user interface (our website). A slider element is actually an <code>input</code> element with the the type <code>range</code>. We give it a ID in order to be able to select is from our JavaScript script, a class to style it (if we choose to), and a minimum, maximum, and step size that depend on our data. <code>value</code> is what we read out in order to know the position of the slider. Let's initialise it somewhere in the middle (1979).</p>
+<p>Let's do this a slider. The first thing we need is to add this slider to the user interface (our website). A slider element is actually an <code>input</code> element with the the type <code>range</code>. We give it a ID in order to be able to select is from our JavaScript script, a class to style it (if we choose to), and a minimum, maximum, and step size that depend on our data. <code>value</code> is what we read out in order to know the position of the slider. Let's initialise it somewhere in the middle (1979).</p>
 <pre class="sourceCode html"><code class="sourceCode html"><span class="kw">&lt;input</span><span class="ot"> type=</span><span class="st">&quot;range&quot;</span><span class="ot"> name=</span><span class="st">&quot;range&quot;</span><span class="ot"> class=</span><span class="st">&quot;slider&quot;</span><span class="ot"> id=</span><span class="st">&quot;year_slider&quot;</span><span class="ot"> value=</span><span class="st">&quot;1979&quot;</span><span class="ot"> min=</span><span class="st">&quot;1950&quot;</span><span class="ot"> max=</span><span class="st">&quot;2008&quot;</span><span class="ot"> step=</span><span class="st">&quot;1&quot;</span> <span class="kw">&gt;&lt;br&gt;</span></code></pre>
-<p>In our script, we now want the year to be a variable, so we need to initialise it. Because the value is a string, we need to parse it to an integer using <code>parseInt()</code>. To get the index (rather than the actual year), we can simply subtract the first year 1950.</p>
-<pre class="js"><code>var year_idx = parseInt(document.getElementById(&quot;year_slider&quot;).value)-1950;</code></pre>
-<p>Updating the year becomes quite simple. All we need to do is add another event listener that changes the year the moment we touch the slider. The event we want to listen for is called <code>input</code>. We then execute the <code>update()</code> function we wrote earlier.</p>
+<p>In our script, we now want the year to be a variable, so we need to initialise it. Because the value is a string, we need to parse it to an integer using <code>parseInt()</code>.</p>
+<pre class="js"><code>var year = parseInt(document.getElementById(&quot;year_slider&quot;).value);</code></pre>
+<p>Now we need add another event listener that changes the year the moment we touch the slider. The event we want to listen for is called <code>input</code>. When we get an event, we need to add a new filter command to update the data. We then execute the <code>update()</code> function we wrote earlier.</p>
 <pre class="js"><code>d3.select(&quot;#year_slider&quot;).on(&quot;input&quot;, function () {
-    year_idx = parseInt(this.value) - 1950;
+    year = parseInt(this.value) - 1950;
+    filtered_nations = nations.filter(function(nation){nation.year==year})
+    update();
+});</code></pre>
+<p>Uh-oh, looks like this doesn't play nicely with our checkboxes! Let's add a line to our filter function to make sure that this continent is currently checked:</p>
+<pre class="js"><code>d3.select(&quot;#year_slider&quot;).on(&quot;input&quot;, function () {
+    year = parseInt(this.value) - 1950;
+    filtered_nations = nations.filter(function(nation){
+        //Grab the checkbox corresponding to this country
+        var checkbox = d3.selectAll(&quot;.region_cb&quot;)[0].filter(
+            function(cb){return cb.value == nation.country})[0];
+
+        //If the checkbox is checked, see if the year matches
+        if (checkbox.checked){      
+             return(nation.year==year)
+        } else {
+               //Otherwise it doesn&#39;t matter what the year is
+               return(false)
+        }
+    })
     update();
 });</code></pre>
 <p>So far, the update function only knows how to handle new data (<code>.enter</code>) and removed data (<code>.exit</code>), but not what to do when we update data. In addition to <code>d3.enter()</code> and <code>d3.exit()</code>, D3 also offers <code>d3.transition</code> to handle updating data. First, we need to define how to transition between data points. We might want to interpolate between to values linearly over the duration of 200 ms, like this:</p>
-<pre class="js"><code>dot.transition().ease(&quot;linear&quot;).duration(200);</code></pre>
-<p>Now we know how it's gonna happen, but we need to tell the transition what the actual change is. We can simply move the part of our code that updates the circle attributes from our <code>enter</code> function to our <code>transition</code> function. Now, instead of using a hardcoded index for the year, we use the index <code>year_idx</code> that we updated in our event listener earlier.</p>
-<pre class="js"><code>dot.enter().append(&quot;circle&quot;).attr(&quot;class&quot;,&quot;dot&quot;)
-        .style(&quot;fill&quot;, function(d) { return colorScale(d.region); });
-dot.exit().remove();
-dot.transition().ease(&quot;linear&quot;).duration(200)
-                .attr(&quot;cx&quot;, function(d) { return xScale(d.income[year_idx]); }) // this is how attr knows to work with the data
-                .attr(&quot;cy&quot;, function(d) { return yScale(d.lifeExpectancy[year_idx]); })
-                .attr(&quot;r&quot;, function(d) { return rScale(d.population[year_idx]); });</code></pre>
+<pre class="js"><code>circles.transition().ease(&quot;linear&quot;).duration(200);</code></pre>
+<p>Now we know how it's gonna happen, but we need to tell the transition what the actual change is. We can simply move the part of our code that updates the circle attributes from our <code>enter</code> function to our <code>transition</code> function.</p>
+<pre class="js"><code>circles.enter().append(&quot;circle&quot;).attr(&quot;class&quot;,&quot;data_point&quot;)
+        .style(&quot;fill&quot;, function(d) { return colorScale(d.continent); });
+circles.exit().remove();
+circles.transition().ease(&quot;linear&quot;).duration(200)
+        .attr(&quot;cx&quot;, function(d) { return xScale(d.gdpPercap); }) 
+        .attr(&quot;cy&quot;, function(d) { return yScale(d.lifeExp); })
+        .attr(&quot;r&quot;, function(d) {return rScale(d.pop)});</code></pre>
 <div id="other-transition-functions-you-might-want" class="callout panel panel-info">
 <div class="panel-heading">
 <h2><span class="glyphicon glyphicon-pushpin"></span>Other transition functions you might want</h2>
@@ -105,72 +124,12 @@ dot.transition().ease(&quot;linear&quot;).duration(200)
 </div>
 </div>
 <p>Like any programming language, JavaScript can also be used to evaluate summary statistics of our data. As an example, let's compute the mean life expectancy and income for the different regions.</p>
-<p>First, we need to loop through all the data and group them by the region they are in:</p>
-<pre class="js"><code>// Calculate the averages for each region.
-var region_names = [&quot;Sub-Saharan Africa&quot;, &quot;South Asia&quot;, &quot;Middle East &amp; North Africa&quot;, &quot;America&quot;, &quot;East Asia &amp; Pacific&quot;, &quot;Europe &amp; Central Asia&quot;];
-
-var region_data = [];
-for (var i in region_names) {
-    var filtered_nations_by_regions = nations.filter(function(nation){
-        return (nation.region == region_names[i]); 
-    });
-    region_data[i] = calc_mean(filtered_nations_by_regions);
-}
-
-var filtered_reg_nations = region_data.map(function(region) { return region;});</code></pre>
-<p>Next, we write a function that returns an array of objects region_data. We want it to contain the mean income and life for each year across all nations, weighted by population.</p>
-<pre class="js"><code>function calc_mean(region_data) {
-    var mean_income = [];
-    var mean_lifeExpectancy = [];
-
-    for (var year_idx2 in region_data[0].years) {
-        var sum_income = 0;
-        var sum_lifeExpectancy = 0;
-        var sum_population = 0;
-
-        for (var k in region_data) {
-            var kpop = region_data[k].population[year_idx2];
-            var kincome = region_data[k].income[year_idx2];
-            var klife = region_data[k].lifeExpectancy[year_idx2];
-            sum_income += kpop*kincome; 
-            sum_lifeExpectancy += kpop*klife;
-            sum_population += kpop;             
-        }
-
-        mean_income[year_idx2] = sum_income/sum_population;
-        mean_lifeExpectancy[year_idx2] = sum_lifeExpectancy/sum_population;
-    }
-    averageData = {
-        region: region_data[0].region,
-        years: region_data[0].years,
-        mean_income: mean_income,
-        mean_lifeExpectancy: mean_lifeExpectancy
-    };
-
-    return averageData;
-}</code></pre>
-<div id="the-master-challenge" class="challenge panel panel-success">
-<div class="panel-heading">
-<h1><span class="glyphicon glyphicon-pencil"></span>The master challenge</h1>
-</div>
-<div class="panel-body">
-<p>It's time to put together everything you've learned. Write code that displays (and updates) the mean values that we just computed as little crosses in the graph for the different regions.</p>
-</div>
-</div>
 <div id="style" class="challenge panel panel-success">
 <div class="panel-heading">
 <h1><span class="glyphicon glyphicon-pencil"></span>...style!</h1>
 </div>
 <div class="panel-body">
 <p>Add axis labels and make the fonts pretty.</p>
-</div>
-</div>
-<div id="using-different-data-formats" class="challenge panel panel-success">
-<div class="panel-heading">
-<h1><span class="glyphicon glyphicon-pencil"></span>Using different data formats</h1>
-</div>
-<div class="panel-body">
-<p>What if you don't have your data in JSON format? Change your code to load in nations.csv instead of nations.json and have it produce the same plot.</p>
 </div>
 </div>
 <p>By the end of this lesson, your page should look something like this:</p>
