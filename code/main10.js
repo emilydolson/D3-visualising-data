@@ -119,7 +119,7 @@ d3.tsv("http://emilydolson.github.io/D3-visualising-data/resources/nations.csv",
 	    filtered_nations = nations.filter(function(nation){
 		//Grab the checkbox corresponding to this country
 		var checkbox = d3.selectAll(".region_cb")[0].filter(
-		    function(cb){return cb.value == nation.country})[0];
+		    function(cb){return cb.value == nation.continent})[0];
 		//If the checkbox is checked, see if the year matches
 		if (checkbox.checked){		
 		    return(nation.year==year)
