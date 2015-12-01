@@ -111,7 +111,7 @@ single year at a time. We use the `filter()` function to just look at the most
 recent data (2007):
 
 ~~~{.js}
-var filtered_nations = nations.filter(function(nation){return nation.year==2007})
+var filtered_nations = nations.filter(function(nation){return nation.year==1957})
 ~~~
 
 `filter()` is another function that wants a function as input. In this case, the
