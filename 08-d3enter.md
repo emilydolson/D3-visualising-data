@@ -75,20 +75,15 @@ We also give it a class, just in case we might want to select the axis later in 
 We're slowly getting there. Having our two axes, we can now finally add our data. 
 
 And now we're ready to add one circle per data point! 
-We don't want to see all the data at once for now. Let's instead just look at the 
-most recent data point (data for 2009).
-
-<img src="img/data_structure.png" alt="data structure" width="500" />
-
 
 ~~~{.js}
 var data_canvas = canvas.append("g")
   .attr("class", "data_canvas");
       
-var dot = data_canvas.selectAll(".dot")
+var circles = data_canvas.selectAll("circle")
   .data(nations, function(d){return d.name});
 
-dot.enter().append("circle").attr("class","dot")
+circles.enter().append("circle").attr("class","data_point")
   .attr("cx", function(d) { return xScale(d.income[d.income.length-1]); }) 
   .attr("cy", function(d) { return yScale(d.lifeExpectancy[d.lifeExpectancy.length-1]); })
   .attr("r", 5);
@@ -96,14 +91,14 @@ dot.enter().append("circle").attr("class","dot")
 
 We're starting this bit by adding a `g` element to our canvas.
 This group is going to be our data canvas, so that's the class name we give it.
-We then select everything of the class `dot`. This is an empty set at the moment,
-since we haven't created any dots, yet.
+We then select all circles. This is an empty set at the moment,
+since we haven't created any circles, yet.
 We are then telling our page where to find the data, using `.data(nations)`.
 
 We are also inserting what is called a key function `.data(nations, function(d){return d.name});`. This function will help D3 keep track of the data when we start changing it (and the order of the objects). It's important to keep the identifier unique, which is why we return only the name of the current element.
 
 Now comes the interesting part:
-The function `enter()` takes each element in the dataset and does everything that follows afterwards for each of these elements we're adding in. These new dots need to be added with the class 'dot', so that next time we call `data_canvas.selectAll(".dot")` we get the dots that have already been added to our plot.
+The function `enter()` takes each element in the dataset and does everything that follows afterwards for each of these elements we're adding in. These new circles need to be added with the class 'data_point', so that next time we call `data_canvas.selectAll(".data_point")` we get the circles that have already been added to our plot.
 
 What we want to do is to create one circle for each data point. That's
 what the last four lines of code do. They are creating the circle, and then setting 
@@ -111,9 +106,20 @@ the attributes `cx`, `cy`, and `r`.
 The attributes `cx` and `cy` define the position of the centre of the circle and are based on the income (we are looking at the most recent data point: `[nation.income.length-1]`.) and life expectancy of the data point (that is temporarily called `d`). The radius is set to an 
 arbitrary number... for now.
 
+This sure is a lot of circles! We probably want to only look at data from a 
+single year at a time. We use the `filter()` function to just look at the most
+recent data (2007):
+
+~~~{.js}
+var filtered_nations = nations.filter(function(nation){return nation.year==2007})
+~~~
+
+`filter()` is another function that wants a function as input. In this case, the
+function that it takes will recieve one data point at a time and return `true`
+if we want to plot it and `false` if we don't.
 
 > # A new dimension {.challenge}
 > Change the code so that the radius of the circles represents the population. First, create a 'sqrt' scale with a minimum of 0 and a maximum of 5e8. The range should be between 0 and 40. 
 
 
-<iframe src="http://isakiko.github.io/D3-visualising-data/code/index08.html" width="1000" height="600"></iframe>
+<iframe src="http://emilydolson.github.io/D3-visualising-data/code/index08.html" width="1000" height="600"></iframe>

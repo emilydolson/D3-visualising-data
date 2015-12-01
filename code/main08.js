@@ -1,5 +1,17 @@
 // Load the data.
-d3.json("nations.json", function(nations) {
+
+var accessor = function(d){ 
+    return {
+	country: d.country,
+	year: +d.year,
+	pop: +d.pop,
+	continent: d.continent,
+	lifeExp: +d.lifeExp,
+	gdpPercap: +d.gdpPercap
+    };
+}
+
+d3.tsv("nations.csv", accessor, function(nations) {
 
 	// Create the SVG frame inside chart_area.
 	var chart_area = d3.select("#chart_area");
@@ -76,14 +88,15 @@ d3.json("nations.json", function(nations) {
 	// var filtered_nations = nations.filter(function(nation){ return nation.population[nation.population.length-1][1] > 10000000;});
 
 	// var filtered_nations = nations.filter(function(nation){ return nation.region == "Sub-Saharan Africa";});
+    var filtered_nations = nations.filter(function(nation){return nation.year==2007})
 
 	var data_canvas = canvas.append("g")
 	.attr("class", "data_canvas")
 
-    var dot = data_canvas.selectAll(".dot")
+    var circles = data_canvas.selectAll("data_point")
     .data(nations, function(d){return d.name});
 
-    dot.enter().append("circle").attr("class","dot")                
+    circles.enter().append("circle").attr("class","data_point")                
                   .attr("cx", function(d) { return xScale(d.income[d.income.length-1]); }) // this is how attr knows to work with the data
                   .attr("cy", function(d) { return yScale(d.lifeExpectancy[d.lifeExpectancy.length-1]); })
                   .attr("r", function(d) { return rScale(d.population[d.population.length-1]); });

@@ -16,7 +16,7 @@ D3 is a JavaScript library. This means that we can use all of the JavaScript com
 
 The main purpose of D3 is to create visualisations of data online. Because it uses JavaScript, it is possible to make graphs interactive! 
 
-As a little refresher, we will repeat a little bit html to set up our page. 
+As a little refresher, we will repeat a little bit of html to set up our page. 
 
 Create a new GitHub repository and create a gh-pages branch to which you commit. This is, where our actual page will live.
 Then create `index.html` in the new repository containing the following:
@@ -32,7 +32,7 @@ Then create `index.html` in the new repository containing the following:
 
     <h1>The Wealth & Health of Nations</h1>
 
-    <p id="chart_area"></p>
+    <div id="chart_area"></div>
 
     <script src="http://d3js.org/d3.v3.min.js"></script>
     <script src="main.js"></script>
@@ -45,33 +45,64 @@ There are a few things in this file that look new:
 
 Additionally, we now need to link d3 using `<script src="http://d3js.org/d3.v3.min.js"></script>`. The order matters. Since code is executed sequentially and we want to use parts of the D3 library in our own script, we have to link to d3.js first.
 
-The last bit, that's important here is an HTML element (paragraph) we create. We give it an id `chart_area`. This is the area we reserve for our pretty chart. We will use JavaScript (and D3) to fill it in. 
-
+The last bit, that's important here is an HTML element (div) we create. We give it an id `chart_area`. This is the area we reserve for our pretty chart. We will use JavaScript (and D3) to fill it in. 
 
 Now, let's write main.js.
 
-Similar to the syntax we've already seen (`JSON.stringify`), D3-specific functions can be called using a `d3.`-syntax.
+D3-specific functions can be called using a `d3.`-syntax.
 
-The first thing we need, is of course our data, which is stored in 'nations.json'.
-D3 provides a handy function to read in `json`-files:
+The first thing we need, is of course our data, which is stored in 'nations.csv'.
+D3 provides a handy function to read in `csv`-files:
 
 ~~~{.d3}
-d3.json("resources/nations.json", function(nations) { }
+d3.csv("resources/nations.csv", function(nations) { }
 ~~~
 
 This line probably needs a little explanation and we'll go through it bit by bit: 
 
-* `d3.json()` is called the function call. In this case, we have a function that reads in a json file, parses it, and is also able to do something with the parsed data on the way.
-* The first argument `"resources/nations.json"` tells the function where to get the data we want to have parsed.
+* `d3.csv()` is called the function call. In this case, we have a function that reads in a json file, parses it, and is also able to do something with the parsed data on the way.
+* The first argument `"resources/nations.csv"` tells the function where to get the data we want to have parsed.
 * `function(...){...}` is called the callback function. It is a so-called 'inline' function, which means it has no name (we're only operating in the object space here). This also means we can't use this function anywhere else in our code. The code we put inside the curly brackets is the code that's run once d3.json() is called and the data is loaded.
-* D3 assigns the name `nations` to the parsed object it returns. We can only use 'nations' within the callback function, this means our code only knows of `nations` inside the curly brackets.
+* D3 assigns the name `nations` to the parsed object it returns. We can only use 'nations' within the callback function, this means our code only knows of `nations` inside the curly brackets. This means most of our visualization code will need to go inside the curly brackets.
 * What seems unusual, but is actually quite common, is that this function call doesn't return anything. It is simply executed and displayed (if we tell it to), but no value is returned. 
 
 
 > ## What else can I read in conveniently? {.callout}
-> D3 offers the possibility to also read in csv (comma-separated values) files directly. See [here](https://github.com/mbostock/d3/wiki/CSV) for an example. Also available are functions to read in tab-separated values (tsv) and files with arbitrary delimiter (dsv).
+> D3 offers the possibility to also read in tsv, json, and other types of files directly. See [here](https://github.com/mbostock/d3/wiki/CSV) for an example.
 
+If we start by looking at `nations` with the `console.log()` function, we can 
+see that D3 has interpretted the csv file relatively intelligently. It gave us
+an array of Javascript objects, each of which represents one row in the original
+file. These objects each have a property for each column. The names of these
+properties are based on the names that the header gave to each column in the 
+csv. There's one thing that D3 isn't quite smart enough about, though - the
+types of the variables. It's assuming everything is a string - a series of
+characters. You can tell because there are quotation marks around the numbers.
+We can fix this by passing in another argument to `d3.csv()`. This argument 
+will be another function, which will be called on each of the objects 
+representing rows of the csv file:
 
+~~~{.js}
+var accessor = function(d){ 
+    return {
+	country: d.country,
+	year: +d.year,
+	pop: +d.pop,
+	continent: d.continent,
+	lifeExp: +d.lifeExp,
+	gdpPercap: +d.gdpPercap
+    };
+}
+~~~
+
+The `+` signs tell Javascript to interpret that variable as a number. We can
+stick this into the call to the `d3.csv()` function as the second argument:
+
+~~~{.js}
+d3.csv("nations.csv", accessor, function(nations){
+   //Awesome visualizations here!
+}
+~~~
 
 So naturally, the next step is to think about what we want to happen between the curly brackets.
 For now, we want to:
