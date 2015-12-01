@@ -125,4 +125,4 @@ Like any programming language, JavaScript can also be used to evaluate summary s
 
 By the end of this lesson, your page should look something like this:
 
-<iframe src="http://isakiko.github.io/D3-visualising-data/code/index10.html" width="1000" height="600"></iframe>
+<iframe src="http://emilydolson.github.io/D3-visualising-data/code/index10.html" width="1000" height="600"></iframe>
