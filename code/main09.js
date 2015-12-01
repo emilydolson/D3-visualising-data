@@ -104,10 +104,10 @@ d3.tsv("http://emilydolson.github.io/D3-visualising-data/resources/nations.csv",
 	d3.selectAll(".region_cb").on("change", function() {
 		var type = this.value;
 		if (this.checked) { // adding data points (not quite right yet)
-			var new_nations = nations.filter(function(nation){ return nation.region == type;});
+			var new_nations = nations.filter(function(nation){ return nation.continent == type;});
 			filtered_nations = filtered_nations.concat(new_nations);
 		} else { // remove data points from the data that match the filter
-			filtered_nations = filtered_nations.filter(function(nation){ return nation.region != type;});
+			filtered_nations = filtered_nations.filter(function(nation){ return nation.continent != type;});
 		}
 		update();
 	});
