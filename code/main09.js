@@ -1,5 +1,18 @@
 // Load the data.
-d3.json("nations.json", function(nations) {
+
+
+var accessor = function(d){ 
+    return {
+	country: d.country,
+	year: +d.year,
+	pop: +d.pop,
+	continent: d.continent,
+	lifeExp: +d.lifeExp,
+	gdpPercap: +d.gdpPercap
+    };
+}
+
+d3.tsv("http://emilydolson.github.io/D3-visualising-data/resources/nations.csv", accessor, function(nations) {
 
 	var filtered_nations = nations.map(function(nation) { return nation; });
 
