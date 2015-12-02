@@ -5,17 +5,17 @@ title: Visualizing your data on the web using D3
 
 Open science should be visible science. And what better
 way to make your research visible and accessible than putting it on the 
-internet. But no one wants to read endless tables of data. We’d rather
+Internet? But no one wants to read endless tables of data. We’d rather
 look at graphs, or, even better, have the possibility of interacting with the data.
 And we have probably all created some graphs. But in order to make them 
 accessible to many people, we will have to move away from our specialized
-software to a more universal platform - the internet. 
+software to a more universal platform - the Web. 
 
 We want to:
 
 * Display our data on a website to increase visibility and accessibility of our research.
 
-Our goal is to create a [dynamic bubble plot](http://bost.ocks.org/mike/nations/) (a prettier version of a scatter plot) and publish it on the internet.
+Our goal is to create a [dynamic bubble plot](http://bost.ocks.org/mike/nations/) (a prettier version of a scatter plot) and publish it on the Internet.
 
 Along the way, we will learn:
 
