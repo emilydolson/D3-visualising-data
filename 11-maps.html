@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta name="generator" content="pandoc">
+    <title>Software Carpentry: D3 - Maps</title>
+    <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" type="text/css" href="css/bootstrap/bootstrap.css" />
+    <link rel="stylesheet" type="text/css" href="css/bootstrap/bootstrap-theme.css" />
+    <link rel="stylesheet" type="text/css" href="css/swc.css" />
+    <link rel="alternate" type="application/rss+xml" title="Software Carpentry Blog" href="http://software-carpentry.org/feed.xml"/>
+    <meta charset="UTF-8" />
+    <!-- HTML5 shim, for IE6-8 support of HTML5 elements -->
+    <!--[if lt IE 9]>
+      <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+  </head>
+  <body class="lesson">
+    <div class="container card">
+      <div class="banner">
+        <a href="http://software-carpentry.org" title="Software Carpentry">
+          <img alt="Software Carpentry banner" src="img/software-carpentry-banner.png" />
+        </a>
+      </div>
+      <div class="row">
+        <div class="col-md-10 col-md-offset-1">
+          <h1 class="title">D3 - Maps</h1>
+          <h2 class="subtitle">Because checkboxes are boring</h2>
+<div id="learning-objectives" class="objectives panel panel-warning">
+<div class="panel-heading">
+<h2><span class="glyphicon glyphicon-certificate"></span>Learning Objectives</h2>
+</div>
+<div class="panel-body">
+<ul>
+<li>Making a map in D3</li>
+<li>Using event bindings to link graphical elements together</li>
+</ul>
+</div>
+</div>
+<p>Right now, we have circles colored by continent, but it's not obvious which continent stands for which color. Since D3 also handles maps really nicely, let's replace the checkboxes with a map that lets us select and de-select continents. If color the continents the same way as the circles, it will double as a legend!</p>
+<p>First, let's make a new canvas to hold all of our map stuff. We'll append this to our <code>frame</code> element, so that it ends up on the same SVG canvas as our other shapes:</p>
+<pre class="js"><code>var map_canvas = frame.append(&quot;g&quot;);
+var map_width = 300;
+var map_height = 150;</code></pre>
+<p>Since there's a nice strong postive correlation between income and life-expectancy, that lower right corner of the graph looks like a good place for the map. We can position it there by subtracting the map canvas' height and width from the main canvas' height and width, and moving the map canvas to there:</p>
+<pre class="js"><code>var upper_x = canvas_width - map_width;
+var upper_y = canvas_height - map_height;
+map_canvas.attr(&quot;transform&quot;, &quot;translate(&quot; + upper_x + &quot;,&quot; + upper_y + &quot;)&quot; );    </code></pre>
+<p>Okay, great. Now we need to get some data telling us what the continents on earth actually look like. The easiest format to use this data in is <code>.json</code>. JSON stands for JavaScript Object Notation, and it looks exactly like Javascript objects that we've already seen. Technically, the file that we're going to use here is in <code>[TopoJSON](https://github.com/mbostock/topojson)</code> format, which allows for easy description of geographic shapes. A JSON file containing outlines for all of the continents is available <a href="http://emilydolson.github.io/D3-visualising-data/resources/continents.json">here</a>. We can load this file with the <code>d3.json()</code> function, which works just like <code>d3.csv()</code> except that it loads a JSON file:</p>
+<pre class="js"><code>d3.json(&quot;http://emilydolson.github.io/D3-visualising-data/resources/continents.json&quot;, function(continent_data) {
+//All of our map stuff happens here
+}</code></pre>
+<p>This file contains an array of five <code>FeatureCollection</code> objects. D3 understands how to convert these objects into paths, so we don't need to worry too much about their contents. We can just bind them to a selection like we did before:</p>
+<pre class="js"><code>var continents = map_canvas.selectAll(&quot;.continent&quot;).data(continent_data);</code></pre>
+<p>Here, we have selected all of the objects within <code>map_canvas</code> that have class <code>continent</code> (currently nothing), and bound the data from the JSON file to them. Since the selection we bound the data to was empty, everything will be in the <code>enter</code> selection. For each element, we want to add a path. Since these are geographic paths, we're going to use the <code>d3.geo.path()</code> function instaed of the normal <code>d3.path()</code> function, so that D3 will be able to handle the eccentricities of geographic data:</p>
+<pre class="js"><code>continents.enter().append(&quot;path&quot;)
+    .attr(&quot;class&quot;, &quot;continent&quot;)
+    .attr(&quot;d&quot;, d3.geo.path())
+    .attr(&quot;name&quot;, function(d) {return d.name;}</code></pre>
+<p>Well that's sure a big map. If we want to control it, we'll need to customize the <code>d3.geo.path()</code> function a little bit. Just like our axes were governed by a <code>scale</code> object with <code>domain</code> and <code>range</code> to tell it how incoming numbers should map to pixels on the webpage, <code>geo.path</code> objects have an associated <code>projection</code> object that tells them how geographic coordinates should map to your web-page. In the case of maps it's a little more complicated, though, because mapping points on a sphere to a flat surface invariably introduces distortions. People have come up with many different map projections over the years, each of which have their own strengths and weaknesses (<a href="http://xkcd.com/977/">your favorite says a lot about you</a>). D3 has <a href="https://github.com/mbostock/d3/wiki/Geo-Projections">many</a> built-in, and just about any that you could ever want in the <a href="https://github.com/d3/d3-geo-projection/">Extended Geographic Projections library</a>. For now, let's use the equirectangular projection because, in the words of XKCD, &quot;<a href="http://xkcd.com/977/">this one's fine</a>&quot;:</p>
+<pre class="js"><code>var projection = d3.geo.equirectangular()
+    .translate([(map_width/2), (map_height/2)])
+    .scale( map_width / 2 / Math.PI);
+var path = d3.geo.path().projection(projection);</code></pre>
+<p>This will center the projection in our map canvas, scale it appropriately, and then create a <code>geo.path</code> that uses it. We can now go back and use it to create the continent paths:</p>
+<pre class="js"><code>continents.enter().append(&quot;path&quot;)
+    .attr(&quot;class&quot;, &quot;continent&quot;)
+    .attr(&quot;d&quot;, path)
+    .attr(&quot;name&quot;, function(d) {return d.name;}
+    .style(&quot;fill&quot;, function(d) { return colorScale(d.name); });</code></pre>
+<p>There, that's better! Now let's add the interactions so that we can use the map instead of the checkboxes. We want to bind an interaction to each continent so something happens when we click on it. Conveniently, since we gave all of the continents their own class, we can easily select all of them. We'll also use classes to keep track of which continents are currently selected vs. unselected. Other than that, this is going to be really similar to our checkbox function:</p>
+<pre class="js"><code>map_canvas.selectAll(&quot;.continent&quot;).on(&quot;click&quot;, function(d){
+    if (d3.select(this).classed(&quot;unselected&quot;)){
+       //We&#39;re adding data points
+       d3.select(this).classed(&quot;unselected&quot;, false)
+       var new_nations = nations.filter(function(nation){
+           return nation.continent == d.name &amp;&amp; nation.year==year;});
+       filtered_nations = filtered_nations.concat(new_nations);
+
+    
+    } else {
+        //we&#39;re removing data points
+    d3.select(this).classed(&quot;unselected&quot;, true)
+    filtered_nations = filtered_nations.filter(function(nation){
+        return nation.continent != d.name;});
+    };
+    update();
+});</code></pre>
+<p>We used a few new things here. The <code>this</code> keyword refers to the continent that this function is bound to. D3's <code>classed</code> function returns true if the selection has the specified class, or, if there's a second argument, adds or removes that class based on whether the second argument is <code>true</code> or <code>false</code>. So, in this function, we toggle whether or not the selection has the class <code>unselected</code>.</p>
+<p>One thing that was nice about the checkboxes is that we could see which ones were selected. Let's make it so the map can do the same thing! We can decrease the opacity of continents when their data isn't being displayed. Since we've already assigned a class to the unselected continents, we can do this in our CSS stylesheet:</p>
+<pre class="sourceCode css"><code class="sourceCode css"><span class="fl">.unselected</span> <span class="kw">{</span>
+    <span class="kw">opacity:</span> <span class="dt">.5</span><span class="kw">;</span>
+<span class="kw">}</span></code></pre>
+<p>Ta-da!</p>
+<p>By the end of this lesson, your page should look something like this:</p>
+<iframe src="http://emilydolson.github.io/D3-visualising-data/code/index11.html" width="1000" height="600"></iframe>
+
+<p>The continents.json file was generated based on the code for <a href="http://techslides.com/continents-and-map-projections-with-d3-js">this map projection explorer</a></p>
+        </div>
+      </div>
+      <div class="footer">
+        <a class="label swc-blue-bg" href="http://software-carpentry.org">Software Carpentry</a>
+        <a class="label swc-blue-bg" href="https://github.com/swcarpentry/lesson-template">Source</a>
+        <a class="label swc-blue-bg" href="mailto:admin@software-carpentry.org">Contact</a>
+        <a class="label swc-blue-bg" href="LICENSE.html">License</a>
+      </div>
+    </div>
+    <!-- Javascript placed at the end of the document so the pages load faster -->
+    <script src="http://software-carpentry.org/v5/js/jquery-1.9.1.min.js"></script>
+    <script src="css/bootstrap/bootstrap-js/bootstrap.js"></script>
+  </body>
+</html>
