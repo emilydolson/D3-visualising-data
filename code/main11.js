@@ -93,7 +93,7 @@ var projection = d3.geo.equirectangular()
     .scale( map_width / 2 / Math.PI);
 var path = d3.geo.path().projection(projection);
 
-d3.json("continents.json", function(outlines) {
+d3.json("../resources/continents.json", function(outlines) {
     
     var continents = map_canvas.selectAll(".continent").data(outlines);
     
