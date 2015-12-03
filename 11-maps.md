@@ -160,6 +160,13 @@ CSS stylesheet:
 
 Ta-da!
 
+> # Fix the slider {.challenge}
+> Now that we've changed how we select data, the slider doesn't know how to
+> correctly check for continents it should be leaving out. Fix it so that
+> it checks for continents with the `unselected` class. 
+>
+> Hint: `.classed()` works on selections - we don't need to worry about picking
+> out just the element itself like we did with checkboxes.
 
 By the end of this lesson, your page should look something like this:
 
