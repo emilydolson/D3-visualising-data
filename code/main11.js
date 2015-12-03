@@ -148,6 +148,25 @@ d3.tsv("http://emilydolson.github.io/D3-visualising-data/resources/nations.csv",
 	    .attr("d", path)
 	    .attr("name", function(d) { return d.name; })
 	    .style("fill", function(d) { return colorScale(d.name); });
+
+	map_canvas.selectAll(".continent").on("click", function(d){
+	
+	    if (d3.select(this).classed("unselected")){
+		//We're adding data points
+		d3.select(this).classed("unselected", false)
+		var new_nations = nations.filter(function(nation){
+		    return nation.continent == d.name && nation.year==year;});
+		filtered_nations = filtered_nations.concat(new_nations);
+		update();
+	
+	    } else {
+		//we're removing data points
+		d3.select(this).classed("unselected", true)
+		filtered_nations = filtered_nations.filter(function(nation){
+		    return nation.continent != d.name;});
+	    update();
+	    }
+	});
     });
 
     // slider
@@ -168,26 +187,6 @@ d3.tsv("http://emilydolson.github.io/D3-visualising-data/resources/nations.csv",
 	update();
     });
 
-    console.log("binding?")
-    map_canvas.selectAll(".continent").on("click", function(d){
-	
-	if (d3.select(this).classed("unselected")){
-	    //We're adding data points
-	    d3.select(this).classed("unselected", false)
-	    var new_nations = nations.filter(function(nation){
-		return nation.continent == d.name && nation.year==year;});
-	    filtered_nations = filtered_nations.concat(new_nations);
-	    update();
-	
-	} else {
-	    //we're removing data points
-	    d3.select(this).classed("unselected", true)
-	    filtered_nations = filtered_nations.filter(function(nation){
-		return nation.continent != d.name;});
-	    update();
-	}
-    });
-    console.log("Bound?")
 
     // check boxes
     d3.selectAll(".region_cb").on("change", function() {
