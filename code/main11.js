@@ -166,7 +166,7 @@ d3.tsv("http://emilydolson.github.io/D3-visualising-data/resources/nations.csv",
 	})
 	update();
     });
-
+    console.log("binding?")
     map_canvas.selectAll(".continent").on("click", function(d){
 	
 	if (d3.select(this).classed("unselected")){
