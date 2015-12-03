@@ -186,6 +186,12 @@ Ta-da!
 > Hint: The `rect` SVG element lets you specify a `stroke` color and a `fill`
 > color independently.
 
+> # More practice with maps! {.challenge}
+> A json file describing the shapes of all of the countries (as of 2015) is
+> available at
+> http://emilydolson.github.io/D3-visualising-data/resources/countries.json.
+> See if you can use it to make a map that shows the countries.
+
 By the end of this lesson, your page should look something like this:
 
 <iframe src="http://emilydolson.github.io/D3-visualising-data/code/index11.html" width="1000" height="600"></iframe>
