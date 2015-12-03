@@ -9,7 +9,6 @@ minutes: 20
 > 
 > * Using a slider 
 > * Updating data points using d3.transition
-> * Putting it all together by adding regional averages in a master challenge!
 
 At the moment, the year that we are looking at in the data is hardcoded. 
 Naturally, we want the user to be able to see how the data changes over time. 
