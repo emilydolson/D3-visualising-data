@@ -139,7 +139,7 @@ d3.tsv("http://emilydolson.github.io/D3-visualising-data/resources/nations.csv",
 	.scale( map_width / 2 / Math.PI);
     var path = d3.geo.path().projection(projection);
 
-    d3.json("../resources/continents.json", function(outlines) {
+    d3.json("http://emilydolson.github.io/D3-visualising-data/resources/continents.json", function(outlines) {
     
 	var continents = map_canvas.selectAll(".continent").data(outlines);
     
@@ -167,6 +167,7 @@ d3.tsv("http://emilydolson.github.io/D3-visualising-data/resources/nations.csv",
 	})
 	update();
     });
+
     console.log("binding?")
     map_canvas.selectAll(".continent").on("click", function(d){
 	
