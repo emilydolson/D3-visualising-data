@@ -87,22 +87,6 @@ canvas.append("g")
 //////////////////////AXES CREATED//////////////////////////
 
 ////////////////////MAKE MAP///////////////////////////////
-var continents;
-var projection = d3.geo.equirectangular()
-    .translate([(map_width/2), (map_height/2)])
-    .scale( map_width / 2 / Math.PI);
-var path = d3.geo.path().projection(projection);
-
-d3.json("../resources/continents.json", function(outlines) {
-    
-    var continents = map_canvas.selectAll(".continent").data(outlines);
-    
-    continents.enter().append("path")
-	.attr("class", "continent")
-	.attr("d", path)
-	.attr("name", function(d) { return d.name; })
-	.style("fill", function(d) { return colorScale(d.name); });
-});
 
 
 // Load the data.
@@ -148,6 +132,23 @@ d3.tsv("http://emilydolson.github.io/D3-visualising-data/resources/nations.csv",
     }
 
     update();
+    
+    //Map
+    var projection = d3.geo.equirectangular()
+	.translate([(map_width/2), (map_height/2)])
+	.scale( map_width / 2 / Math.PI);
+    var path = d3.geo.path().projection(projection);
+
+    d3.json("../resources/continents.json", function(outlines) {
+    
+	var continents = map_canvas.selectAll(".continent").data(outlines);
+    
+	continents.enter().append("path")
+	    .attr("class", "continent")
+	    .attr("d", path)
+	    .attr("name", function(d) { return d.name; })
+	    .style("fill", function(d) { return colorScale(d.name); });
+    });
 
     // slider
     d3.select("#year_slider").on("input", function () {
@@ -183,7 +184,7 @@ d3.tsv("http://emilydolson.github.io/D3-visualising-data/resources/nations.csv",
 	    filtered_nations = filtered_nations.filter(function(nation){
 		return nation.continent != d.name;});
 	    update();
-	};
+	}
     });
     console.log("Bound?")
 
