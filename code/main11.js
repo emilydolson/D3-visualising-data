@@ -27,10 +27,17 @@ canvas.attr("transform", "translate(" + margin.left + "," + margin.top + ")");
 var map_canvas = frame.append("g");
 var map_width = 300;
 var map_height = 150;
-var upper_x = canvas_width - map_width;
+var upper_x = canvas_width - map_width + margin.left;
 var upper_y = canvas_height - map_height;
 
 map_canvas.attr("transform", "translate(" + upper_x + "," + upper_y + ")" );
+map_canvas.append("rect")
+    .style("fill", "lightcyan")
+    .style("stroke", "black")
+    .attr("x", 0)
+    .attr("y", 0)
+    .attr("width", map_width)
+    .attr("height", map_height);
 
 // Various scales. These domains make assumptions of data, naturally.
 var xScale = d3.scale.log(); // income

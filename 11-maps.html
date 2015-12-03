@@ -57,7 +57,8 @@ map_canvas.attr(&quot;transform&quot;, &quot;translate(&quot; + upper_x + &quot;
 <pre class="js"><code>continents.enter().append(&quot;path&quot;)
     .attr(&quot;class&quot;, &quot;continent&quot;)
     .attr(&quot;d&quot;, d3.geo.path())
-    .attr(&quot;name&quot;, function(d) {return d.name;}</code></pre>
+    .attr(&quot;name&quot;, function(d) {return d.name;}
+    .style(&quot;fill&quot;, function(d) { return colorScale(d.name); })</code></pre>
 <p>Well that's sure a big map. If we want to control it, we'll need to customize the <code>d3.geo.path()</code> function a little bit. Just like our axes were governed by a <code>scale</code> object with <code>domain</code> and <code>range</code> to tell it how incoming numbers should map to pixels on the webpage, <code>geo.path</code> objects have an associated <code>projection</code> object that tells them how geographic coordinates should map to your web-page. In the case of maps it's a little more complicated, though, because mapping points on a sphere to a flat surface invariably introduces distortions. People have come up with many different map projections over the years, each of which have their own strengths and weaknesses (<a href="http://xkcd.com/977/">your favorite says a lot about you</a>). D3 has <a href="https://github.com/mbostock/d3/wiki/Geo-Projections">many</a> built-in, and just about any that you could ever want in the <a href="https://github.com/d3/d3-geo-projection/">Extended Geographic Projections library</a>. For now, let's use the equirectangular projection because, in the words of XKCD, &quot;<a href="http://xkcd.com/977/">this one's fine</a>&quot;:</p>
 <pre class="js"><code>var projection = d3.geo.equirectangular()
     .translate([(map_width/2), (map_height/2)])
@@ -69,7 +70,17 @@ var path = d3.geo.path().projection(projection);</code></pre>
     .attr(&quot;d&quot;, path)
     .attr(&quot;name&quot;, function(d) {return d.name;}
     .style(&quot;fill&quot;, function(d) { return colorScale(d.name); });</code></pre>
-<p>There, that's better! Now let's add the interactions so that we can use the map instead of the checkboxes. We want to bind an interaction to each continent so something happens when we click on it. Conveniently, since we gave all of the continents their own class, we can easily select all of them. We'll also use classes to keep track of which continents are currently selected vs. unselected. Other than that, this is going to be really similar to our checkbox function:</p>
+<p>There, that's better!</p>
+<div id="try-out-another-projection" class="challenge panel panel-success">
+<div class="panel-heading">
+<h1><span class="glyphicon glyphicon-pencil"></span>Try out another projection!</h1>
+</div>
+<div class="panel-body">
+<p>Swap out the equirectangular projection for something more exciting! Remember that if you want to use one of the maps from the extended library you need to add the link to it to your html file:</p>
+<p><code>&lt;script src=&quot;http://d3js.org/d3.geo.projection.v0.min.js&quot; charset=&quot;utf-8&quot;&gt;&lt;/script&gt;</code></p>
+</div>
+</div>
+<p>Now let's add the interactions so that we can use the map instead of the checkboxes. We want to bind an interaction to each continent so something happens when we click on it. Conveniently, since we gave all of the continents their own class, we can easily select all of them. We'll also use classes to keep track of which continents are currently selected vs. unselected. Other than that, this is going to be really similar to our checkbox function:</p>
 <pre class="js"><code>map_canvas.selectAll(&quot;.continent&quot;).on(&quot;click&quot;, function(d){
     if (d3.select(this).classed(&quot;unselected&quot;)){
        //We&#39;re adding data points
@@ -93,6 +104,24 @@ var path = d3.geo.path().projection(projection);</code></pre>
     <span class="kw">opacity:</span> <span class="dt">.5</span><span class="kw">;</span>
 <span class="kw">}</span></code></pre>
 <p>Ta-da!</p>
+<div id="fix-the-slider" class="challenge panel panel-success">
+<div class="panel-heading">
+<h1><span class="glyphicon glyphicon-pencil"></span>Fix the slider</h1>
+</div>
+<div class="panel-body">
+<p>Now that we've changed how we select data, the slider doesn't know how to correctly check for continents it should be leaving out. Fix it so that it checks for continents with the <code>unselected</code> class.</p>
+<p>Hint: <code>.classed()</code> works on selections - we don't need to worry about picking out just the element itself like we did with checkboxes.</p>
+</div>
+</div>
+<div id="add-a-box-around-the-map" class="challenge panel panel-success">
+<div class="panel-heading">
+<h1><span class="glyphicon glyphicon-pencil"></span>Add a box around the map</h1>
+</div>
+<div class="panel-body">
+<p>That map is kind of looking like it's hovering in the middle of nowhere. Add a box around it to make it look more like a legend.</p>
+<p>Hint: The <code>rect</code> SVG element lets you specify a <code>stroke</code> color and a <code>fill</code> color independently.</p>
+</div>
+</div>
 <p>By the end of this lesson, your page should look something like this:</p>
 <iframe src="http://emilydolson.github.io/D3-visualising-data/code/index11.html" width="1000" height="600"></iframe>
 

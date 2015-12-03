@@ -13,7 +13,7 @@ minutes: 20
 At the moment, the year that we are looking at in the data is hardcoded. 
 Naturally, we want the user to be able to see how the data changes over time. 
 
-Let's do this a slider. The first thing we need is to add this slider to the user interface (our website). A slider element is actually an `input` element with the the type `range`. We give it a ID in order to be able to select is from our JavaScript script, a class to style it (if we choose to), and a minimum, maximum, and step size that depend on our data. `value` is what we read out in order to know the position of the slider. Let's initialise it somewhere in the middle (1979).
+Let's do this with a slider. The first thing we need to do is add this slider to the user interface (our website). A slider element is actually an `input` element with the the type `range`. We give it an ID in order to be able to select it from our JavaScript script, a class to style it (if we choose to), and a minimum, maximum, and step size that depend on our data. `value` is what we read out in order to know the position of the slider. Let's initialise it somewhere in the middle (1979).
 
 ~~~{.html}
 <input type="range" name="range" class="slider" id="year_slider" value="1979" min="1950" max="2008" step="1" ><br>
@@ -114,10 +114,7 @@ dot.enter().append("circle").attr("class","dot")
 > ## We have used some special objects given to us by the browser {.callout}
 > * document.x - selecting things within the page (getElementById)
 > * console.x - interact with the browser's console (log)
-> * event.x - only interesting in the scope of an event like "mouseover", "mousemove", "keydown". Returns information about the event (pageX - where on the page did this event occur?).
-
-Like any programming language, JavaScript can also be used to evaluate summary statistics of our data. As an example, let's compute the mean life expectancy and income for the different regions. 
-
+> * event.x - only interesting in the scope of an event like "mouseover", "mousemove", "keydown". Returns information about the event (pageX - where on the page did this event occur?). 
 
 > # ...style! {.challenge}
 > Add axis labels and make the fonts pretty. 

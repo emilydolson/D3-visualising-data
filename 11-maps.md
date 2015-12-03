@@ -76,6 +76,7 @@ continents.enter().append("path")
 	.attr("class", "continent")
 	.attr("d", d3.geo.path())
 	.attr("name", function(d) {return d.name;}
+	.style("fill", function(d) { return colorScale(d.name); })
 ~~~
 
 Well that's sure a big map. If we want to control it, we'll need to customize
@@ -112,7 +113,17 @@ continents.enter().append("path")
 	.style("fill", function(d) { return colorScale(d.name); });
 ~~~
 
-There, that's better! Now let's add the interactions so that we can use
+There, that's better! 
+
+> # Try out another projection! {.challenge}
+> Swap out the equirectangular projection for something more exciting!
+> Remember that if you want to use one of the maps from the extended library
+> you need to add the link to it to your html file:
+>
+> `<script src="http://d3js.org/d3.geo.projection.v0.min.js" charset="utf-8"></script>`
+> 
+
+Now let's add the interactions so that we can use
 the map instead of the checkboxes. We want to bind an interaction to each
 continent so something happens when we click on it. Conveniently, since we
 gave all of the continents their own class, we can easily select all of them.
@@ -167,6 +178,13 @@ Ta-da!
 >
 > Hint: `.classed()` works on selections - we don't need to worry about picking
 > out just the element itself like we did with checkboxes.
+
+> # Add a box around the map {.challenge}
+> That map is kind of looking like it's hovering in the middle of nowhere.
+> Add a box around it to make it look more like a legend.
+>
+> Hint: The `rect` SVG element lets you specify a `stroke` color and a `fill`
+> color independently.
 
 By the end of this lesson, your page should look something like this:
 
