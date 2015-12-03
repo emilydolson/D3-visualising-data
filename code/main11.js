@@ -157,15 +157,15 @@ d3.tsv("http://emilydolson.github.io/D3-visualising-data/resources/nations.csv",
 		var new_nations = nations.filter(function(nation){
 		    return nation.continent == d.name && nation.year==year;});
 		filtered_nations = filtered_nations.concat(new_nations);
-		update();
-	
+
 	    } else {
 		//we're removing data points
 		d3.select(this).classed("unselected", true)
 		filtered_nations = filtered_nations.filter(function(nation){
 		    return nation.continent != d.name;});
-	    update();
 	    }
+
+	    update();
 	});
     });
 
@@ -174,14 +174,14 @@ d3.tsv("http://emilydolson.github.io/D3-visualising-data/resources/nations.csv",
 	year = parseInt(this.value);
 	filtered_nations = nations.filter(function(nation){
 	    //Grab the checkbox corresponding to this country
-	    var checkbox = d3.selectAll(".region_cb")[0].filter(
-		function(cb){return cb.value == nation.continent})[0];
+	    var continent = d3.selectAll(".continent").filter(
+		function(c){return c.name == nation.continent});
 	    //If the checkbox is checked, see if the year matches
-	    if (checkbox.checked){		
-		return(nation.year==year)
+	    if (continent.classed("unselected")){		
+		return(false)
 	    } else {
 		//Otherwise it doesn't matter what the year is
-		return(false)
+		return(nation.year==year)
 	    }
 	})
 	update();
