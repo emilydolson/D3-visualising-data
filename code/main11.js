@@ -185,7 +185,7 @@ d3.tsv("http://emilydolson.github.io/D3-visualising-data/resources/nations.csv",
 	    update();
 	};
     });
-
+    console.log("Bound?")
 
     // check boxes
     d3.selectAll(".region_cb").on("change", function() {
