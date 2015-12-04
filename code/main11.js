@@ -109,7 +109,7 @@ var accessor = function(d){
     };
 }
 
-d3.tsv("http://emilydolson.github.io/D3-visualising-data/resources/nations.csv", accessor, function(nations) {
+d3.csv("http://emilydolson.github.io/D3-visualising-data/resources/nations.csv", accessor, function(nations) {
 
     //Initialize variables:
     var year = parseInt(document.getElementById("year_slider").value);
@@ -121,6 +121,37 @@ d3.tsv("http://emilydolson.github.io/D3-visualising-data/resources/nations.csv",
     var data_canvas = canvas.append("g").attr("class", "data_canvas")
 
     //////////////////////FILL IN DATA//////////////////////////
+
+    function bind_path_events(){
+	var line_maker = d3.svg.line();
+	line_maker.x(function(d) {return (xScale(d.gdpPercap)) })
+	line_maker.y(function(d) {return (yScale(d.lifeExp)) })
+
+	data_canvas.selectAll("circle").on("click", function(nation) {
+	    if (d3.select(this).classed("clicked")){
+		d3.select(this).classed("clicked", false);
+		data_canvas.selectAll("path")
+		    .filter(function(d){return d[0].country==nation.country})
+		    .data([]).exit().remove();
+	    
+	    } else {
+		d3.select(this).classed("clicked", true);
+		var data = nations.filter(function(d){
+		    return d.country==nation.country
+		});
+		data = data.sort(function(a, b) {d3.ascending(a.year, b.year)})
+		data_canvas.selectAll("path")
+		    .filter(function(d){return d[0].country==nation.country})
+		    .data([data])
+		    .enter()
+		    .append("path")
+		    .attr("d", line_maker)
+		    .style("stroke", "black")
+		    .style("fill", "none")
+		    .style("stroke-width", 5);
+	    }
+	});
+    }
 
     // update the plot, includes enter, exit, and transition
     function update() {
@@ -136,6 +167,8 @@ d3.tsv("http://emilydolson.github.io/D3-visualising-data/resources/nations.csv",
 	    .attr("cx", function(d) { return xScale(d.gdpPercap); }) 
 	    .attr("cy", function(d) { return yScale(d.lifeExp); })
 	    .attr("r", function(d) {return rScale(d.pop)});
+
+	bind_path_events();
     }
 
     update();
@@ -206,4 +239,5 @@ d3.tsv("http://emilydolson.github.io/D3-visualising-data/resources/nations.csv",
 	}
 	update();
     });
+
 });

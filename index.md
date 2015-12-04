@@ -49,7 +49,9 @@ Along the way, we will learn:
 7.	[D3 Into the data](08-d3enter.html)
 8.	[D3 Add and remove](09-d3exit.html)
 9. [D3 Transitions](10-d3update.html)
-xx. [What now?](xx-d3future.html)
+10. [Lines (and other SVG paths)](11-paths.html)
+11. [Maps](12-maps.html)
+12. [What now?](xx-d3future.html)
 
 We are using [gapminder data](http://gapminder.org) [reformatted by Jennifer Bryan](http://www.stat.ubc.ca/~jenny/notOcto/STAT545A/examples/gapminder/data/gapminderData.txt) and the later lessons are based on an example by [Mike Bostock](http://bost.ocks.org/mike/nations/). In order to make this example slightly easier, we interpolated the data. The data files can be found [here](http://emilydolson.github.io/D3-visualising-data/resources/nations.csv).
 Lessons created by [Isabell Kiral-Kornek](https://github.com/isakiko) and [Robert Kerr](https://github.com/robrkerr) and modified for this workshop by [Emily Dolson](https://github.com/emilydolson).
