@@ -18,8 +18,7 @@ The main purpose of D3 is to create visualisations of data online. Because it us
 
 As a little refresher, we will repeat a little bit of html to set up our page. 
 
-Create a new GitHub repository and create a gh-pages branch to which you commit. This is, where our actual page will live.
-Then create `index.html` in the new repository containing the following:
+Create `index.html` containing the following:
 
 ~~~{.html}
 <!DOCTYPE html>
@@ -124,7 +123,7 @@ that drawing area, we'll have separate elements for both axes and the area for o
 What we now want to end up with in our html document is this:
 
 ~~~{.html}
-<p id="chart_area"> <svg> </svg> </p>
+<div id="chart_area"> </div>
 ~~~
 
 But this time, we want to create these elements automatically using JavaScript only.
@@ -143,7 +142,8 @@ Now we're setting up the grid by appending the chart area by the SVG picture fra
 var frame = chart_area.append("svg");
 ~~~
 
-in the HTML file. We chose to append because we now have access to the SVG element without the need to seperately select it by ID.
+in the HTML file. We chose to append because we now have access to the 
+SVG element without the need to seperately select it by ID.
 
 We also create the canvas inside the frame:
 
@@ -171,8 +171,8 @@ frame.attr("width", frame_width);
 frame.attr("height", frame_height);
 ~~~
 
-The canvas element will have to fit nicely into the frame. To make it fit, we set
-a transform attribute and use the translate function. 
+The canvas element will have to fit nicely into the frame. To make it fit, we 
+set a transform attribute and use the translate function. 
 
 ~~~{.js}
 // Shift the canvas and make it slightly smaller than the svg canvas.
@@ -181,7 +181,6 @@ canvas.attr("transform", "translate(" + margin.left + "," + margin.top + ")");
 
 > # Adding SVGs from JavaScript file {.challenge}
 > 1. Add a SVG circle element to the frame.
-> 1. Once the circle reference is obtained, make the radius 40px, the border black and the colour green.
+> 2. Once the circle reference is obtained, make the radius 40px, the border black and the colour green.
 >
 > HINT: You can use the `attr` method on the circle object obtained.
-

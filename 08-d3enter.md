@@ -26,9 +26,9 @@ xScale.range([0, canvas_width]); // set minimum and maximum range on the page
 D3's scale object provides a number of functions to create the scaling we want 
 for our data. For example, we can choose between a logarithmic scale (`log`), a 
 linear scale (`linear`), a square root scale (`sqrt`), or a categorical scale 
-(e.g. `category20` could represent 20 different colours).
+(e.g. `category20` can represent 20 different colours).
 
-The domain consists of the data values that will get mapped to the minimum and maximum positions on the page specified by the range. Often, the domain would be set to the minimum and maximum values of the data and the range to the edges of the plotting area. 
+The domain consists of the data values that will get mapped to the minimum and maximum positions on the page specified by the range. Often, the domain will be set to the minimum and maximum values of the data and the range to the edges of the plotting area. 
 
 
 Instead of spreading this code over three lines, we often find another notation 
@@ -48,7 +48,7 @@ The next step is to create the actual axis and linking it to the scale we just
 created:
 
 ~~~{.js}
-// Creating the x & y axes.
+// Creating the x axis.
 var xAxis = d3.svg.axis().orient("bottom").scale(xScale);
 ~~~
 
@@ -65,12 +65,16 @@ canvas.append("g")
   .call(xAxis);
 ~~~
 
-`.call` calls the axis we just created and pushed it to the element.
+`.call()` calls the axis we just created and pushes it to the element.
 We add a transform attribute to move the axis to the bottom of the plotting area (instead of having it across the top). There are a number of transform options, but here we are just using `translate` and pass in the amount to shift the axis in the x and y directions, respectively. Here we shift it only in the y direction (i.e. down) by an amount given by height of the canvas.  
 We also give it a class, just in case we might want to select the axis later in our code.
 
 > # We might need a y-axis, too {.challenge}
-> 1. Create a linear scale for the y-axis, with 10 being the minimum and 85 being the maximum value. Then, add the axis to the canvas.
+> Create a linear scale for the y-axis, with 10 being the minimum and 85 being the maximum value. Then, add the axis to the canvas.
+> 
+> Hint #1: You probably want to orient the axis "left"
+> Hint #2: Remember that SVG coordinates are flipped from what you might expect 
+> - (0,0) is the upper left corner.
 
 We're slowly getting there. Having our two axes, we can now finally add our data. 
 
@@ -106,27 +110,29 @@ the attributes `cx`, `cy`, and `r`.
 The attributes `cx` and `cy` define the position of the centre of the circle and are based on the income (we are looking at the most recent data point: `[nation.income.length-1]`.) and life expectancy of the data point (that is temporarily called `d`). The radius is set to an 
 arbitrary number... for now.
 
-This sure is a lot of circles! We probably want to only look at data from a 
-single year at a time. We use the `filter()` function to just look at the most
-recent data (2007):
+Right now, we're displaying data from a semi-random year.  We can use the 
+`filter()` function to just look at the most recent data (2007):
 
 ~~~{.js}
 var filtered_nations = nations.filter(function(nation){return nation.year==2007})
 ~~~
 
-Similar to previous functions (e.g. `map`), this function iterates over each of the elements in the array `nations`, temporarily calling it `nation`. 
-It only includes elements in the new array `filtered_nations` if the function evaluates to 'true' for that element. Here this will be the case for data points whose year is 2007.
+Similar to previous functions, this function iterates over each of the 
+elements in the array `nations`, temporarily calling it `nation`. It only 
+includes elements in the new array `filtered_nations` if the function evaluates
+ to 'true' for that element. Here this will be the case for data points whose 
+year is 2007.
 
 
 > # Filtering by region {.challenge}
 > You might have noticed that our data contains information about the continent in 
 > which a country is.
 > 
-> 1. Create a filter so that you only display data points from "Africa".
+> Create a filter so that you only display data points from "Africa".
 
 
 > # A new dimension {.challenge}
-> Change the code so that the radius of the circles represents the population. First, create a 'sqrt' scale with a minimum of 0 and a maximum of 5e8. The range should be between 0 and 40. 
+> Change the code so that the radius of the circles represents the population. First, create a 'sqrt' scale (`d3.scale.sqrt()`) with a minimum of 0 and a maximum of 5e8. The range should be between 0 and 40. 
 
 
 <iframe src="http://emilydolson.github.io/D3-visualising-data/code/index08.html" width="1000" height="600"></iframe>

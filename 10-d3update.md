@@ -30,7 +30,7 @@ Now we need add another event listener that changes the year the moment we touch
 
 ~~~{.js}
 d3.select("#year_slider").on("input", function () {
-	year = parseInt(this.value) - 1950;
+	year = parseInt(this.value);
 	filtered_nations = nations.filter(function(nation){nation.year==year})
 	update();
 });
@@ -41,11 +41,11 @@ to our filter function to make sure that this continent is currently checked:
 
 ~~~{.js}
 d3.select("#year_slider").on("input", function () {
-	year = parseInt(this.value) - 1950;
+	year = parseInt(this.value);
 	filtered_nations = nations.filter(function(nation){
 		//Grab the checkbox corresponding to this country
 		var checkbox = d3.selectAll(".region_cb")[0].filter(
-			function(cb){return cb.value == nation.country})[0];
+			function(cb){return cb.value == nation.continent})[0];
 
 		//If the checkbox is checked, see if the year matches
 		if (checkbox.checked){		
@@ -60,8 +60,10 @@ d3.select("#year_slider").on("input", function () {
 ~~~
 
 
-So far, the update function only knows how to handle new data (`.enter`) and removed data (`.exit`), but not what to do when we update data. 
-In addition to `d3.enter()` and `d3.exit()`, D3 also offers `d3.transition` to handle updating data. First, we need to define how to transition between data points. We might want to interpolate between to values linearly over the duration of 200 ms, like this: 
+So far, the update function is instantaneously updating the appearance of all
+circles when the data changes. If we want ppeople to watch circles change
+over time, this is neither pretty or helpful. 
+To fix this, D3 also offers the `d3.transition` function to handle updating data. First, we need to define how to transition between data points. We might want to interpolate between to values linearly over the duration of 200 ms, like this: 
 
 ~~~{.js}
 circles.transition().ease("linear").duration(200);
@@ -104,7 +106,7 @@ var tooltip = d3.select("body")
 and then create event listeners for moving the mouse into a circle and out of one. Different from the example on the web page, we want to display the specific country we are looking at. When we move the mouse, we want the tool tip to move with it. And the moment we leave a circle, we want the tool tip to hide again.
 
 ~~~{.js}
-dot.enter().append("circle").attr("class","dot")				      	
+circles.enter().append("circle").attr("class","dot")				      	
 			.style("fill", function(d) { return colorScale(d.region); })
 			.on("mouseover", function(d){return tooltip.style("visibility", "visible").text(d.name);})
 			.on("mousemove", function(){return tooltip.style("top", (d3.event.pageY-10)+"px").style("left",(d3.event.pageX+10)+"px");})

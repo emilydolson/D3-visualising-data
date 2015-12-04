@@ -139,7 +139,7 @@ d3.csv("http://emilydolson.github.io/D3-visualising-data/resources/nations.csv",
 		var data = nations.filter(function(d){
 		    return d.country==nation.country
 		});
-		data = data.sort(function(a, b) {d3.ascending(a.year, b.year)})
+		data = data.sort(function(a, b) {return d3.ascending(a.year, b.year)})
 		data_canvas.selectAll("path")
 		    .filter(function(d){return d[0].country==nation.country})
 		    .data([data])

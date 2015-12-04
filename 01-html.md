@@ -29,7 +29,7 @@ file to expect. To do this, we start our file with:
 ~~~ {.html}
 <!DOCTYPE html>
 <html>
-	--> Everything goes in here <--
+	<!--Everything goes in here (this is what html comments look like)-->
 </html> 
 ~~~
 
@@ -69,7 +69,7 @@ using &lt;div&gt; to open and &lt;/div&gt; to close it.
 <!DOCTYPE html>
 <html> 
 	<head> 
-		--> meta-data (like page title, inclusion of other files) <--
+		<!--meta-data (like page title, inclusion of other files) -->
 	</head> 
 	<body> 
 		<div>Hello world!</div>

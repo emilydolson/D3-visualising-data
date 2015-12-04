@@ -11,15 +11,15 @@ minutes: 20
 > * Javascript variables
 > * Functions in Javascript
 
-We've learned how to integrate text and graphical objects into our page and we also know how to publish it.
+We've learned how to integrate text and graphical objects into our page.
 So far, we might as well just create a plot elsewhere and publish it as an image. But wouldn't it be much better, if the user could interact with the data? To do that, we need to learn a little scripting. Javascript is a programming language designed to be used to manipulate html documents.
 Everything between &lt;script&gt; and &lt;/script&gt; within the body will be interpreted as JavaScript code. Since the code we write in the HTML file is executed sequentially, we need to make sure that whenever we refer to an element on the page, this element already exists. An easy way to ensure this is to include scripts just before the end of the body element. 
 Just like we did with styles, we can outsource our code into a separate file with the extension `.js`. 
 
-First we need to create our `visualization.js` file and link to it in the HTML body.
+First we need to create our `main.js` file and link to it in the HTML body.
 
 ~~~{.html}
-<script src="visualization.js"></script>
+<script src="main.js"></script>
 ~~~
 
 In JavaScript there are two main data types: strings (text, everything in 
@@ -102,9 +102,8 @@ var cat_object = {
 > (`attributename` is a placeholder). Create a new attribute `height` and assign a number! 
 
 Since Javascript is a programming language like any other, it has all of the
-standard features like loops, conditionals, and functions. We're not actually
-going to need loops or conditionals (give them a google if you ever need them -
-the syntax is only subtley different from other programming languages). 
+standard features like loops, conditionals, and functions. Because of the way
+D3 works, we're not actually going to need loops today.
 Functions, however, are going to be super important. D3 uses functions 
 everywhere. Frequently, we'll be passing functions as arguments to other 
 functions. So let's go over the syntax for functions in Javascript:
@@ -146,3 +145,16 @@ We're not going to talk about them here, since d3.js provides a lot of similar
 functions that are more specialized for dealing with data, which is our purpose
 here. But if you're ever trying to build a website or something, you should
 definitely give them a look!
+
+> ## Write your own function {.challenge}
+> Write a function that takes a Javascript object, `person`, as an argument.
+> Assume `person` has a `name` attribute and an age` attribute. Make the
+> function log the person's name and age to the console:
+> 
+> ~~~{.js}
+> var person = {name:"Ginny", age:20};
+> logNameAndAge(person);
+> ~~~
+> ~~~{.out}
+> "Ginny is 20 years old"
+> ~~~
