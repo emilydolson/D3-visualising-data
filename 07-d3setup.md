@@ -54,7 +54,7 @@ The first thing we need, is of course our data, which is stored at 'http://emily
 D3 provides a handy function to read in `csv`-files:
 
 ~~~{.d3}
-d3.csv("http://emilydolson.github.io/D3-visualising-data/resources/nations.csv", function(nations) { }
+d3.csv("http://emilydolson.github.io/D3-visualising-data/resources/nations.csv", function(nations) { } )
 ~~~
 
 This line probably needs a little explanation and we'll go through it bit by bit: 
@@ -100,7 +100,7 @@ stick this into the call to the `d3.csv()` function as the second argument:
 ~~~{.js}
 d3.csv("http://emilydolson.github.io/D3-visualising-data/resources/nations.csv", accessor, function(nations){
    //Awesome visualizations here!
-}
+})
 ~~~
 
 So naturally, the next step is to think about what we want to happen between the curly brackets.
