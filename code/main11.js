@@ -226,11 +226,10 @@ d3.csv("http://emilydolson.github.io/D3-visualising-data/resources/nations.csv",
 	    if (continent.classed("unselected")){		
 		return(false)
 	    } else {
-		//Otherwise it doesn't matter what the year is
 		return(nation.year==year)
 	    }
 	})
-	d3.select("#year_slider").text(String(year));
+	d3.select("#year_label").text(this.value);
 	update();
     });
 
