@@ -91,7 +91,10 @@ canvas.append("g")
     .attr("transform", "rotate(-90)")
     .text("life expectancy (years)");;
 
-chart_area.append("p").attr("id", "year_label").style("font", "arial").text(document.getElementById("year_slider").value);
+chart_area.append("p")
+	  .attr("id", "year_label")
+	  .style("font-family", "arial")
+	  .text(String(document.getElementById("year_slider").value));
 
 //////////////////////AXES CREATED//////////////////////////
 
@@ -114,7 +117,7 @@ var accessor = function(d){
 d3.csv("http://emilydolson.github.io/D3-visualising-data/resources/nations.csv", accessor, function(nations) {
 
     //Initialize variables:
-    var year = parseInt(document.getElementById("year_slider").value);
+    var year = parseInt(String(document.getElementById("year_slider").value));
     d3.select("#year_slider").text(year);	
     var filtered_nations = nations.map(function(nation) { return nation;});
     filtered_nations = nations.filter(
@@ -227,7 +230,7 @@ d3.csv("http://emilydolson.github.io/D3-visualising-data/resources/nations.csv",
 		return(nation.year==year)
 	    }
 	})
-	d3.select("#year_slider").text(year);
+	d3.select("#year_slider").text(String(year));
 	update();
     });
 
