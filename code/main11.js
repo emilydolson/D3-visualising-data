@@ -91,11 +91,6 @@ canvas.append("g")
     .attr("transform", "rotate(-90)")
     .text("life expectancy (years)");;
 
-chart_area.append("p")
-	  .attr("id", "year_label")
-	  .style("font-family", "arial")
-	  .text(String(document.getElementById("year_slider").value));
-
 //////////////////////AXES CREATED//////////////////////////
 
 ////////////////////MAKE MAP///////////////////////////////
@@ -159,6 +154,11 @@ d3.csv("http://emilydolson.github.io/D3-visualising-data/resources/nations.csv",
 	});
     }
 
+    chart_area.append("p")
+	      .attr("id", "year_label")
+	      .style("font-family", "arial")
+	      .text(String(document.getElementById("year_slider").value));
+	
     // update the plot, includes enter, exit, and transition
     function update() {
 	var circles = data_canvas.selectAll("circle")  // magic! 
