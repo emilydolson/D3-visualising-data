@@ -96,8 +96,8 @@ canvas.append("g")
 ////////////////////MAKE MAP///////////////////////////////
 
 //make tooltip (using d3-tip library)
-var tip = d3.tip().attr('class', 'd3-tip').html(function(d) { return d.country; });
-canvas.call(tip);
+//var tip = d3.tip().attr('class', 'd3-tip').html(function(d) { return d.country; });
+//canvas.call(tip);
 // Load the data.
 
 var accessor = function(d){ 
@@ -167,9 +167,9 @@ d3.csv("http://emilydolson.github.io/D3-visualising-data/resources/nations.csv",
 	    .data(filtered_nations, function(d){return d.country});
 
 	circles.enter().append("circle").attr("class","data_point")
-	    .style("fill", function(d) { return colorScale(d.continent); })
-	    .on("mouseover", tip.show)
-	    .on("mouseout", tip.hide);
+	    .style("fill", function(d) { return colorScale(d.continent); });
+	    //.on("mouseover", tip.show)
+	    //.on("mouseout", tip.hide);
 	
 	circles.exit().remove();
 	
