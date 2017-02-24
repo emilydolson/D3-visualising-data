@@ -91,7 +91,7 @@ canvas.append("g")
     .attr("transform", "rotate(-90)")
     .text("life expectancy (years)");;
 
-chart_area.append("p").attr("id", "year_label").style("font", "arial");
+chart_area.append("p").attr("id", "year_label").style("font", "arial").text(document.getElementById("year_slider").value);
 
 //////////////////////AXES CREATED//////////////////////////
 
