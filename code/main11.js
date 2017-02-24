@@ -157,10 +157,7 @@ d3.csv("http://emilydolson.github.io/D3-visualising-data/resources/nations.csv",
 	});
     }
 
-    chart_area.append("p")
-	      .attr("id", "year_label")
-	      .style("font-family", "arial")
-	      .text(String(document.getElementById("year_slider").value));
+    d3.select("#year_label").text(String(document.getElementById("year_slider").value));
 	
     // update the plot, includes enter, exit, and transition
     function update() {
