@@ -62,7 +62,7 @@ circle {
   font-weight: bold;
   padding: 12px;
   background: rgba(0, 0, 0, 0.8);
-  color: "white";
+  color: #FFF;
   border-radius: 2px;
 }
 
@@ -73,7 +73,7 @@ circle {
   font-size: 10px;
   width: 100%;
   line-height: 1;
-  color: rgba(255, 255, 255, 0.8);
+  color: rgba(0, 0, 0, 0.8);
   content: "\25BC";
   position: absolute;
   text-align: center;
